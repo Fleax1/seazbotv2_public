@@ -4,12 +4,9 @@ const Discord = require('discord.js'),
     config = require("./config.json"),
     ytdl = require("ytdl-core"),
     fetch = require('node-fetch'),
-    querystring = require('querystring'),
     queue = new Map();
 
-
-
-const version = 'v1.166_Online';
+const version = 'v1.176_Online';
 const botactivity = 'Zentyks faire des danses Fortnite sur TikTok';
 
 client.on('ready', () => {
@@ -88,27 +85,120 @@ client.on("message", async message => {
         ));
     }
 
-    if (command === 'nsfw') {
-      if (message.channel.nsfw === true) {
-        if (!args.length) {
-          return message.channel.send('Vous devez entrer une catégorie !');
-          }
-        const query = querystring.stringify({ term: args.join(' ') });
-        if (args == 'boobs' | args=='ass' | args=='pgif' | args=='gif' | args== 'hass'| args== 'hmidriff'| args== 'pgif'| args== '4k'| args== 'hentai'| args== 'holo'| args== 'hneko'| args== 'neko'| args== 'hkitsune'| args== 'kemonomimi'| args== 'anal'| args== 'hanal'| args== 'gonewild'| args== 'kanna'| args== 'ass'| args== 'pussy'| args== 'thigh'| args== 'hthigh'| args== 'gah'| args== 'coffee'| args== 'food'| args== 'paizuri'| args== 'tentacle' | args== 'hboobs') {
-          const nsfwlink = `https://nekobot.xyz/api/image?type=${args}`;
-          if (args == 'gif') {
-            const nsfwlink = `https://nekobot.xyz/api/image?type=pgif`;
-            const {response} = await fetch(nsfwlink).then(res => res.json()).then(data => {message.channel.send(data.message);})
-          } else {
-            const {response} = await fetch(nsfwlink).then(res => res.json()).then(data => {message.channel.send(data.message);})
-          }
-         }  else {
-           return message.channel.send("Veuillez entrer une catégorie valide !");
-         }
-        } else {
-          message.channel.send("Ce n'est pas un salon NSFW !");
+      if (command === 'nsfw') {
+        if (message.channel.nsfw === true) {
+          if (!args.length) {return message.channel.send('Vous devez entrer une catégorie !');}
+            if (args=='help') {
+              const seazbot = client.users.cache.get('442035389687922688');
+              const embed = {
+                "title": "Toutes les commandes doivent commencer par **!nsfw**",
+                "description": "gif \n boobs \n ass \n pussy \n fun \n 4k \n hentai \n hgif (Hentaï GIF)\n ahegao \n paizuri \n tatoo \n anal \n bdsm \n asian \n cumshot \n gonewild \n  homme",
+                "color": 1,
+                "footer": {
+                  "icon_url": `${seazbot.avatarURL()}`,
+                  "text": "SeAz NSFW"
+                },
+                "author": {
+                  "name": "Listes des commandes NSFW disponibes :"
+                }
+              };
+              message.channel.send({ embed });
+            }
+            else if (args=='boobs' | args=='boob' | args=='tits') {
+              var subReddits = ["TittyDrop", "Boobies"];
+              send()
+            }
+            else if (args=='ass') {
+              var subReddits = ["BigAsses"/*gallery URL*/, "booty", "asstastic"];
+              send()
+            }
+            else if (args=='4k') {
+              var subReddits = ["HighResNSFW"];/*gallery URL*/
+              send()
+            }
+            else if (args=='hentaï' | args=='hentai') {
+              var subReddits = ["yuri", "thick_hentai"];
+              send()
+            }
+            else if (args=='anal') {
+              var subReddits = ["anal"];
+              send()
+            }
+            else if (args=='pussy') {
+              var subReddits = ["pussy"];
+              send()
+            }
+            else if (args=='bdsm') {
+              var subReddits = ["Bondage"];
+              send()
+            }
+            else if (args=='asian') {
+              var subReddits = ["AsianNSFW"];
+              send()
+            }
+            else if (args=='cumshot') {
+              var subReddits = ["GirlsFinishingTheJob"];
+              send()
+            }
+            else if (args=='gonewild') {
+              var subReddits = ["gonewild", "GoneMild"];
+              send()
+            }
+            else if (args=='gif' | args=='gifs') {
+              var subReddits = ["NSFW_GIFS"];
+              send()
+            }
+            else if (args=='hgif' | args=='hgifs') {
+              var subReddits = ["HENTAI_GIF"];
+              send()
+            }
+            else if (args=='fun') {
+              var subReddits = ["NSFWFunny"];
+              send()
+            }
+            else if (args=='paizuri') {
+              var subReddits = ["Paizuri"];
+              send()
+            }
+            else if (args=='ahegao') {
+              var subReddits = ["RealAhegao"];
+              send()
+            }
+            else if (args=='men' | args=='man' | args=='homme') {
+              var subReddits = ["ladybonersgw"];
+              send()
+            }
+            else if (args=='tatoo' | args=='tatoos') {
+              var subReddits = ["Hotchickswithtattoos"];
+              send()
+            } else {
+                return message.channel.send("Veuillez entrer une catégorie valide !");
+            }
+            function send() {
+              const got = require("got");
+              const randomsub = subReddits[Math.floor(Math.random() * subReddits.length)];
+              got(`https://www.reddit.com/r/${randomsub}/random/.json`).then(response => {
+              let content = JSON.parse(response.body);
+              try {
+                let imageurl = content[0].data.children[0].data.url;
+                if (imageurl.includes('gallery') == true | imageurl.includes('preview') == true | imageurl.includes('gfycat') == true | imageurl.includes('rlqjei2rf7l51') == true | imageurl.includes('.mp4') == true){
+                  send()
+                } else {
+                  try {
+                    message.channel.send(imageurl);
+                  } catch (e) {
+                    send()
+                  }
+                }
+              } catch (e) {
+                send()
+              } finally {
+
+              }
+          })
+            }
+        } else {message.channel.send("Ce n'est pas un salon NSFW !");}
         }
-      }
 
     if (message.member.guild.id === taverne) {
         if (command === "ping") {
@@ -194,7 +284,19 @@ client.on("message", async message => {
                 // },
                 {
                     "name": "+play <link>",
-                    "value": "play music in your vocal channel"
+                    "value": "Jouez de la musique dans votre salon vocal"
+                },
+                {
+                    "name": "+skip",
+                    "value": "Passe à la musique suivante"
+                },
+                {
+                    "name": "+stop",
+                    "value": "Arrête la musique"
+                },
+                {
+                    "name": "+nsfw <catégorie>",
+                    "value": "Envoi une image NSFW dans le salon dédié"
                 }
             ]
         };
